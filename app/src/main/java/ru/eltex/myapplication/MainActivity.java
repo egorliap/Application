@@ -1,6 +1,6 @@
 package ru.eltex.myapplication;
 
-import static ru.eltex.myapplication.R.id.button1;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,7 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
+class MyThread implements Runnable{
+    @Override
+    public void run(){
+        System.out.print("Ошибка");
+    }
+}
 public class MainActivity extends AppCompatActivity {
     Button button;
     TextView textView;
@@ -36,24 +41,21 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 new Thread ( () -> {
+
+                Runnable task = () -> {
                     for (int k = 0; k < 100; k++) {
                         try {
-                            Thread.sleep(5);
-                        } catch (InterruptedException ie) {
+                            Thread.sleep(10);
+                       } catch (InterruptedException ie) {
                             System.out.println();
                         }
                         button.setTranslationX(i[0]);
                         i[0] += 2;
                     }
 
-                }).start();
-            }
-             /*    try {
-                   .join();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+            };
+                Thread thread = new Thread(task);
+                thread.start();
                 task = () -> {
                     for (int k = 0; k < 100; k++) {
                         try {
@@ -68,13 +70,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
                 Thread thread1 = new Thread(task);
-                thread1.start();
                 try {
                     thread1.join();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-            }*/
+                thread1.start();
+
+            }
         });
     }
 }
